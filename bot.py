@@ -271,7 +271,7 @@ async def requestHandler(bot:Update, msg:Message):
                         [
                             InlineKeyboardButton(
                                 "Requested Message",
-                                url = f"https://t.me/c/{groupIDPro}/{msg.message_id}"
+                                url = f"https://t.me/c/{groupIDPro}/{message_id}"
                             )
                         ],
                         [
@@ -300,13 +300,13 @@ async def requestHandler(bot:Update, msg:Message):
             await msg.reply_text(
                 replyText,
                 parse_mode = enums.ParseMode.HTML,
-                reply_to_message_id = msg.message_id,
+                reply_to_message_id = message_id,
                 reply_markup = InlineKeyboardMarkup(
                     [
                         [
                             InlineKeyboardButton(
                                 "⏳Request Status⏳",
-                                url = f"https://t.me/c/{channelIDPro}/{requestMSG.message_id}"
+                                url = f"https://t.me/c/{channelIDPro}/{requestmessage_id}"
                             )
                         ]
                     ]
