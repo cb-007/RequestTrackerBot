@@ -5,7 +5,8 @@
 # Importing External Packages
 from pyrogram import (
     Client,
-    filters
+    filters,
+    enums
 )
 from pyrogram.types import (
     Update,
@@ -60,7 +61,7 @@ async def startHandler(bot:Update, msg:Message):
     botInfo = await bot.get_me()
     await msg.reply_text(
         "<b>Hi,this is SiC Request Bot 🤖.\n\nThe requests can be registered by typing ( #request ) in Dump group.\nMovies will be uploaded in UPLOADS CHANNEL only.\nRest of the things will be handled by Admins itself.\n\nMaintainer: Chaitanya Gupta (Team SiC)</b>",
-        parse_mode = "html",
+        parse_mode = enums.ParseMode.HTML,
         reply_markup = InlineKeyboardMarkup(
             [
                 [
@@ -81,7 +82,7 @@ async def chatHandler(bot:Update, msg:Message):
     if msg.new_chat_members[0].is_self: # If bot is added
         await msg.reply_text(
             f"<b>Hey😁, Your Group ID is <code>{msg.chat.id}</code></b>",
-            parse_mode = "html"
+            parse_mode = enums.ParseMode.HTML
         )
     return
 
@@ -92,7 +93,7 @@ async def forwardedHandler(bot:Update, msg:Message):
     if forwardInfo.type == "channel":   # If message forwarded from channel
         await msg.reply_text(
             f"<b>Hey😁, Your Channel ID is <code>{forwardInfo.id}</code>\n\n</b>",
-            parse_mode = "html"
+            parse_mode = enums.ParseMode.HTML
         )
     return
 
@@ -108,7 +109,7 @@ async def groupChannelIDHandler(bot:Update, msg:Message):
         except ValueError:  # If Ids are not integer type
             await msg.reply_text(
                 "<b>Group ID & Channel ID should be integer type😒.</b>",
-                parse_mode = "html"
+                parse_mode = enums.ParseMode.HTML
             )
         else:   # If Ids are integer type
             documents = collection_ID.find()
@@ -120,7 +121,7 @@ async def groupChannelIDHandler(bot:Update, msg:Message):
                 else:   # If group id found in database
                     await msg.reply_text(
                     "<b>Your Group ID already Added.</b>",
-                    parse_mode = "html"
+                    parse_mode = enums.ParseMode.HTML
                     )
                     break
                 for record in document:
@@ -130,7 +131,7 @@ async def groupChannelIDHandler(bot:Update, msg:Message):
                         if document[record][0] == channelID:    #If channel id found in database
                             await msg.reply_text(
                                 "<b>Your Channel ID already Added.</b>",
-                                parse_mode = "html"
+                                parse_mode = enums.ParseMode.HTML
                             )
                             break
             else:   # If group id & channel not found in db
@@ -139,18 +140,18 @@ async def groupChannelIDHandler(bot:Update, msg:Message):
                 except (PeerIdInvalid, ValueError):   # If given group id is invalid
                     await msg.reply_text(
                         "<b>😒Group ID is wrong.\n</b>",
-                        parse_mode = "html"
+                        parse_mode = enums.ParseMode.HTML
                     )
                 except UserNotParticipant:  # If bot is not in group
                     await msg.reply_text(
                         "<b>😁Add me in group and make me admin, then use /add.\n</b>",
-                        parse_mode = "html"
+                        parse_mode = enums.ParseMode.HTML
                     )
                 else:
                     if botSelfGroup.status != "administrator":  # If bot is not admin in group
                         await msg.reply_text(
                             "<b>🥲Make me admin in Group, Then add use /add.\n\n</b>",
-                            parse_mode = "html"
+                            parse_mode = enums.ParseMode.HTML
                         )
                     else:   # If bot is admin in group
                         try:
@@ -158,18 +159,18 @@ async def groupChannelIDHandler(bot:Update, msg:Message):
                         except (UserNotParticipant, ChannelPrivate):    # If bot not in channel
                             await msg.reply_text(
                                 "<b>😁Add me in Channel and make me admin, then use /add.</b>",
-                                parse_mode = "html"
+                                parse_mode = enums.ParseMode.HTML
                             )
                         except (ChatIdInvalid, ChannelInvalid): # If given channel id is invalid
                             await msg.reply_text(
                                 "<b>😒Channel ID is wrong.\n\n</b>",
-                                parse_mode = "html"
+                                parse_mode = enums.ParseMode.HTML
                             )
                         else:
                             if not (botSelfChannel.can_post_messages and botSelfChannel.can_edit_messages and botSelfChannel.can_delete_messages):  # If bot has not enough permissions
                                 await msg.reply_text(
                                     "<b>🥲Make sure to give Permissions like Post Messages, Edit Messages & Delete Messages.</b>",
-                                    parse_mode = "html"
+                                    parse_mode = enums.ParseMode.HTML
                                 )
                             else:   # Adding Group ID, Channel ID & User ID in group
                                 collection_ID.insert_one(
@@ -179,12 +180,12 @@ async def groupChannelIDHandler(bot:Update, msg:Message):
                                 )
                                 await msg.reply_text(
                                     "<b>Your Group and Channel has now been added SuccessFully🥳.\n\</b>",
-                                    parse_mode = "html"
+                                    parse_mode = enums.ParseMode.HTML
                                 )
     else:   # If command is invalid
         await msg.reply_text(
             "<b>Invalid Format😒\nSend Group ID & Channel ID in this format <code>/add GroupID ChannelID</code>.\n</b>",
-            parse_mode = "html"
+            parse_mode = enums.ParseMode.HTML
         )
     return
 
@@ -199,7 +200,7 @@ async def channelgroupRemover(bot:Update, msg:Message):
         except ValueError:  # If group id not integer type
             await msg.reply_text(
                 "<b>Group ID should be integer type😒.</b>",
-                parse_mode = "html"
+                parse_mode = enums.ParseMode.HTML
             )
         else:   # If group id is integer type
             documents = collection_ID.find()
@@ -213,23 +214,23 @@ async def channelgroupRemover(bot:Update, msg:Message):
                         collection_ID.delete_one(document)
                         await msg.reply_text(
                             "<b>Your Channel ID & Group ID has now been Deleted😢 from our Database.\nYou can add them again by using <code>/add GroupID ChannelID</code>.</b>",
-                            parse_mode = "html"
+                            parse_mode = enums.ParseMode.HTML
                         )
                     else:   # If group id, channel id is not removing by one who added
                         await msg.reply_text(
                             "<b>😒You are not the one who added this Channel ID & Group ID.</b>",
-                            parse_mode = "html"
+                            parse_mode = enums.ParseMode.HTML
                         )
                     break
             else:   # If group id not found in database
                 await msg.reply_text(
                     "<b>Given Group ID is not found in our Database🤔.\n</b>",
-                    parse_mode = "html"
+                    parse_mode = enums.ParseMode.HTML
                 )
     else:   # If command is invalid
         await msg.reply_text(
             "<b>Invalid Command😒\nUse <code>/remove GroupID</code></b>.",
-            parse_mode = "html"
+            parse_mode = enums.ParseMode.HTML
         )
     return
 
@@ -298,7 +299,7 @@ async def requestHandler(bot:Update, msg:Message):
             # Sending message for user in group
             await msg.reply_text(
                 replyText,
-                parse_mode = "html",
+                parse_mode = enums.ParseMode.HTML,
                 reply_to_message_id = msg.message_id,
                 reply_markup = InlineKeyboardMarkup(
                     [
@@ -380,7 +381,7 @@ async def callBackButton(bot:Update, callback_query:CallbackQuery):
                         # Editing reqeust message in channel
                         await callback_query.edit_message_text(
                             newMsg,
-                            parse_mode = "html",
+                            parse_mode = enums.ParseMode.HTML,
                             reply_markup = InlineKeyboardMarkup(
                                 [
                                     [
@@ -395,7 +396,7 @@ async def callBackButton(bot:Update, callback_query:CallbackQuery):
                         await bot.send_message(
                             int(groupID),
                             replyText,
-                            parse_mode = "html",
+                            parse_mode = enums.ParseMode.HTML,
                             reply_markup = InlineKeyboardMarkup(
                                 [
                                     [
