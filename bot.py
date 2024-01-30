@@ -36,7 +36,7 @@ from re import match, search
 
 """Connecting to Bot"""
 app = Client(
-    session_name = "RequestTrackerBot",
+    name = "RequestTrackerBot",
     api_id = Config.API_ID,
     api_hash = Config.API_HASH,
     bot_token = Config.BOT_TOKEN
@@ -271,7 +271,7 @@ async def requestHandler(bot:Update, msg:Message):
                         [
                             InlineKeyboardButton(
                                 "Requested Message",
-                                url = f"https://t.me/c/{groupIDPro}/{message_id}"
+                                url = f"https://t.me/c/{groupIDPro}/{message.message_id}"
                             )
                         ],
                         [
@@ -300,7 +300,7 @@ async def requestHandler(bot:Update, msg:Message):
             await msg.reply_text(
                 replyText,
                 parse_mode = enums.ParseMode.HTML,
-                reply_to_message_id = message_id,
+                reply_to_message_id = message.message_id,
                 reply_markup = InlineKeyboardMarkup(
                     [
                         [
